@@ -88,7 +88,7 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
           <!-- 积分点数 -->
           <div _p="y-20px x-15px">
             <div _flex="~ items-center">
-              <div>金币</div>
+              <img _w="15px" _h="15px" src="../assets/img/coin.png" />
               <div
                 _m="l-10px"
                 _p="x-6px y-2px"
@@ -101,7 +101,7 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
             </div>
 
             <div _m="t-8px" _flex="~ items-center">
-              <div>金币</div>
+              <img _w="15px" _h="15px" src="../assets/img/coin.png" />
               <div
                 _m="l-10px"
                 _p="x-6px y-2px"
@@ -291,7 +291,7 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
                   :src="BASE_URL + item.img"
                 />
                 <div _m="b-15px" _flex="~ items-center">
-                  <img _m="r-5px" _w="15px" _h="15px" _bg="white" />
+                  <img _m="r-5px" _w="15px" _h="15px" src="../assets/img/coin.png" />
                   <div>{{ item.price }}</div>
                 </div>
               </div>
