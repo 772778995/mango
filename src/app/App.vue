@@ -9,6 +9,10 @@ import { Notify } from 'quasar'
 const isLoginDialogShow = ref(false)
 /** 是否显示注册弹窗 */
 const isRegisterDialogShow = ref(false)
+/** 是否显示商品详情弹窗 */
+const isGoodsDetailDialogShow = ref(false)
+/** 选中商品详情信息 */
+const activeGoodsDetail = ref<any>(null)
 /** 是否记住登录 */
 const isRemberLogin = ref(true)
 /** 登录表单 */
@@ -53,6 +57,13 @@ api.get('/goods/goodsCategory').then(res => {
 
 const goodsList = ref<any[]>([])
 api.get('/goods/list').then((res: any) => (goodsList.value = res))
+
+/** 商品点击事件 */
+const goodsClickHandler = (goodDetail: any) => {
+  console.log(goodDetail)
+  activeGoodsDetail.value = goodDetail
+  isGoodsDetailDialogShow.value = true
+}
 </script>
 
 <template>
@@ -213,7 +224,6 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
         _h="70px"
         _bg="[#4c4d4d]"
         _border="rounded-4px"
-        _overflow="hidden"
         _cursor="pointer"
       >
         <div _flex="1 ~ center" _bg="orange-400" _text="30px">PLAY</div>
@@ -296,6 +306,11 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
                 _bg="[#303030]"
                 _border="rounded"
                 _flex="~ col items-center"
+                _filter="~"
+                _transition="duration-300"
+                _cursor="pointer"
+                _hover="brightness-110"
+                @click="goodsClickHandler(item)"
               >
                 <div _m="t-15px">{{ item.title }}</div>
                 <img
@@ -317,7 +332,7 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
     </div>
   </div>
 
-  <!-- 登录弹窗 -->
+  <!-- 登录/注册弹窗 -->
   <q-dialog
     v-model:model-value="isLoginDialogShow"
     @before-hide="isRegisterDialogShow = false"
@@ -368,6 +383,27 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
           </div>
         </template>
       </q-form>
+    </div>
+  </q-dialog>
+
+  <!-- 商品详情弹窗 -->
+  <q-dialog v-model:model-value="isGoodsDetailDialogShow">
+    <div _flex="~ col center" _w="300px" _p="y-20px" _bg="gray-700" _text="white">
+      <div>{{ activeGoodsDetail?.title }}</div>
+      <img _m="t-20px" _w="200px" _h="140px" :src="BASE_URL + activeGoodsDetail?.img" />
+      <div _m="t-10px" _w="full" _text="center white/50 12px">
+        <div _w="3/4" _m="auto">{{ activeGoodsDetail?.sub_title }}</div>
+        <div _m="y-10px">合计消耗</div>
+      </div>
+      <div _flex="~ items-center">
+        <img src="../assets/img/coin.png" _w="15px" _h="15px" _m="r-5px" />
+        <div>{{ activeGoodsDetail?.price }}</div>
+      </div>
+
+      <div _m="t-10px" _flex="~ justify-center">
+        <q-btn _bg="red-600" _m="r-20px">购买</q-btn>
+        <q-btn _bg="green-500" @click="isGoodsDetailDialogShow = false">取消</q-btn>
+      </div>
     </div>
   </q-dialog>
 </template>
