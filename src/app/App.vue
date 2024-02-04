@@ -68,13 +68,17 @@ const goodsClickHandler = (goodDetail: any) => {
   isGoodsDetailDialogShow.value = true
 }
 
+const updateGoodsList = async () => {
+  goodsList.value = await api.get('/goods/list', {
+    params: { category_id: activeGoodsCateId.value }
+  })
+}
+
 onMounted(async () => {
   goodsCategory.value = await api.get('/goods/goodsCategory')
   if (goodsCategory.value.length) {
     activeGoodsCateId.value = goodsCategory.value[0].id
-    goodsList.value = await api.get('/goods/list', {
-      params: { category_id: activeGoodsCateId.value }
-    })
+    await updateGoodsList()
   }
 })
 </script>
@@ -303,7 +307,12 @@ onMounted(async () => {
               _hover="bg-[#616161] text-orange-400"
               :class="{ 'bg-[#616161] text-orange-400': activeGoodsCateId === item.id }"
               _cursor="pointer"
-              @click="activeGoodsCateId = item.id"
+              @click="
+                () => {
+                  activeGoodsCateId = item.id
+                  updateGoodsList()
+                }
+              "
             >
               <div
                 _w="10px"
