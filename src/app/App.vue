@@ -13,6 +13,8 @@ const isRegisterDialogShow = ref(false)
 const isGoodsDetailDialogShow = ref(false)
 /** 选中商品详情信息 */
 const activeGoodsDetail = ref<any>(null)
+/** 选中商品分类ID */
+const activeGoodsCateId = ref(-1)
 /** 是否记住登录 */
 const isRemberLogin = ref(true)
 /** 登录表单 */
@@ -57,6 +59,7 @@ const registerHandler = async () => {
 const goodsCategory = ref<any[]>([])
 api.get('/goods/goodsCategory').then(res => {
   goodsCategory.value = res as any
+  if (goodsCategory.value.length) activeGoodsCateId.value = goodsCategory.value[0].id
 })
 
 const goodsList = ref<any[]>([])
@@ -289,7 +292,9 @@ const goodsClickHandler = (goodDetail: any) => {
               _p="y-6px x-12px"
               _transition="duration-300"
               _hover="bg-[#616161] text-orange-400"
+              :class="{ 'bg-[#616161] text-orange-400': activeGoodsCateId === item.id }"
               _cursor="pointer"
+              @click="activeGoodsCateId = item.id"
             >
               <div
                 _w="10px"
