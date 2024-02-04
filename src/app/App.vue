@@ -29,6 +29,10 @@ localForage.getItem('userInfo').then(userInfoStorage => {
 /** 登录 */
 const loginHandler = async () => {
   const res: any = await api.post('/user/login', loginForm.value)
+  if (!res)
+    return Notify.create({
+      message: '密码不正确'
+    })
   userInfo.value = res.userinfo
   if (isRemberLogin.value) await localForage.setItem('userInfo', res.userinfo)
   Notify.create({
@@ -80,7 +84,7 @@ const goodsClickHandler = (goodDetail: any) => {
                 _w="60px"
                 _h="60px"
                 _border="rounded"
-                _cursor="pointer"
+                :class="userInfo ? 'pointer-events-none' : 'cursor-pointer'"
                 @click="isLoginDialogShow = true"
               />
 
