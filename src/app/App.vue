@@ -4,8 +4,14 @@ import api from '../api'
 import localForage from '../utils/localForage'
 import { BASE_URL } from '../api'
 import { Notify } from 'quasar'
+
+/** 是否显示登录弹窗 */
 const isLoginDialogShow = ref(false)
+/** 是否显示注册弹窗 */
+const isRegisterDialogShow = ref(false)
+/** 是否记住登录 */
 const isRemberLogin = ref(true)
+/** 登录表单 */
 const loginForm = ref({
   account: 'admin',
   password: '123456'
@@ -16,7 +22,8 @@ localForage.getItem('userInfo').then(userInfoStorage => {
   if (userInfoStorage) userInfo.value = userInfoStorage
 })
 
-const login = async () => {
+/** 登录 */
+const loginHandler = async () => {
   const res: any = await api.post('/user/login', loginForm.value)
   userInfo.value = res.userinfo
   if (isRemberLogin.value) await localForage.setItem('userInfo', res.userinfo)
@@ -26,9 +33,17 @@ const login = async () => {
   isLoginDialogShow.value = false
 }
 
-const logout = () => {
+/** 退出登录 */
+const logoutHandler = () => {
   userInfo.value = null
   localForage.setItem('userInfo', null)
+}
+
+/** 注册 */
+const registerHandler = async () => {
+  // TODO
+  await api.post('')
+  isRegisterDialogShow.value = false
 }
 
 const goodsCategory = ref<any[]>([])
@@ -81,7 +96,7 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
               _bg="[#303030]"
               _hover="filter brightness-110"
               _cursor="pointer"
-              @click="logout"
+              @click="logoutHandler"
             />
           </div>
 
@@ -303,9 +318,12 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
   </div>
 
   <!-- 登录弹窗 -->
-  <q-dialog v-model:model-value="isLoginDialogShow">
+  <q-dialog
+    v-model:model-value="isLoginDialogShow"
+    @before-hide="isRegisterDialogShow = false"
+  >
     <div _text="white" _p="y-20px x-50px" _flex="~ col center" _bg="[#333]">
-      <q-form _space="y-20px" @submit="login">
+      <q-form _space="y-20px">
         <q-input dark v-model:model-value="loginForm.account" outlined>
           <template v-slot:prepend>
             <q-icon name="person" />
@@ -318,27 +336,37 @@ api.get('/goods/list').then((res: any) => (goodsList.value = res))
           </template>
         </q-input>
 
-        <q-btn type="submit" _w="full" color="primary">登录</q-btn>
+        <q-btn
+          v-if="isRegisterDialogShow"
+          _w="full"
+          color="primary"
+          @click="registerHandler"
+        >
+          注册
+        </q-btn>
+        <template v-else>
+          <q-btn _w="full" color="primary" @click="loginHandler"> 登录 </q-btn>
 
-        <div _flex="~ center">
-          <q-checkbox v-model="isRemberLogin" label="记住我的登录" />
-        </div>
+          <div _flex="~ center">
+            <q-checkbox v-model="isRemberLogin" label="记住我的登录" />
+          </div>
 
-        <div _flex="~ items-center">
-          <div _h="1px" _flex="1" _bg="gray-500" />
-          <div _m="x-5px" _text="gray-500">或者您还可以</div>
-          <div _h="1px" _flex="1" _bg="gray-500" />
-        </div>
+          <div _flex="~ items-center">
+            <div _h="1px" _flex="1" _bg="gray-500" />
+            <div _m="x-5px" _text="gray-500">或者您还可以</div>
+            <div _h="1px" _flex="1" _bg="gray-500" />
+          </div>
 
-        <div _w="full" _flex="~ justify-between">
-          <q-btn color="secondary">转到注册</q-btn>
-          <q-btn color="secondary">找回服务</q-btn>
-        </div>
+          <div _w="full" _flex="~ justify-between">
+            <q-btn color="secondary" @click="isRegisterDialogShow = true">转到注册</q-btn>
+            <q-btn color="secondary">找回服务</q-btn>
+          </div>
 
-        <div _flex="~ center" _text="blue-400" _cursor="pointer">
-          <i class="fa-solid fa-phone" _m="r-10px" _text="20px"></i>
-          联系在线客服
-        </div>
+          <div _flex="~ center" _text="blue-400" _cursor="pointer">
+            <i class="fa-solid fa-phone" _m="r-10px" _text="20px"></i>
+            联系在线客服
+          </div>
+        </template>
       </q-form>
     </div>
   </q-dialog>
