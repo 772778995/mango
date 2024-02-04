@@ -2,10 +2,16 @@ import Axios from 'axios'
 // import { AxiosStatic } from '@/src/typings/axios'
 // import { AxiosInstance } from 'axios'
 import throwError from '../utils/throwError'
+import { Loading } from 'quasar'
 // import { Notify } from 'quasar'
-export const BASE_URL = 'https://www.moshou80.com:8088'
+export const BASE_URL = 'http://103.85.87.250:8087'
 const api = Axios.create({ baseURL: BASE_URL + '/api' })
 export const reqs = ref(0)
+
+watch(reqs, reqs => {
+  if (reqs) Loading.show()
+  else Loading.hide()
+})
 
 api.interceptors.request.use(config => {
   reqs.value++

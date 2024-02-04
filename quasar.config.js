@@ -75,7 +75,7 @@ module.exports = configure(function (/* ctx */) {
         viteConf.resolve.alias = Object.assign(viteConf.resolve.alias, {
           '@': path.resolve(__dirname),
           '~': path.resolve(__dirname, '../backend/src'),
-          'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
+          'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
         })
         merge(viteConf.esbuild, {
           jsxFactory: 'h',
@@ -119,7 +119,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Dialog', 'Notify'],
+      plugins: ['Dialog', 'Notify', 'Loading'],
       config: {
         notify: {
           position: 'top-right',
