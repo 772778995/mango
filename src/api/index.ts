@@ -3,7 +3,7 @@ import Axios from 'axios'
 // import { AxiosInstance } from 'axios'
 import throwError from '../utils/throwError'
 // import { Notify } from 'quasar'
-export const BASE_URL = 'http://103.85.87.250:8086'
+export const BASE_URL = 'https://103.85.87.250:8086'
 const api = Axios.create({ baseURL: BASE_URL + '/api' })
 export const reqs = ref(0)
 
