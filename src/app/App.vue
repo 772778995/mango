@@ -59,20 +59,24 @@ const registerHandler = async () => {
 }
 
 const goodsCategory = ref<any[]>([])
-api.get('/goods/goodsCategory').then(res => {
-  goodsCategory.value = res as any
-  if (goodsCategory.value.length) activeGoodsCateId.value = goodsCategory.value[0].id
-})
 
 const goodsList = ref<any[]>([])
-api.get('/goods/list').then((res: any) => (goodsList.value = res))
 
 /** 商品点击事件 */
 const goodsClickHandler = (goodDetail: any) => {
-  console.log(goodDetail)
   activeGoodsDetail.value = goodDetail
   isGoodsDetailDialogShow.value = true
 }
+
+onMounted(async () => {
+  goodsCategory.value = await api.get('/goods/goodsCategory')
+  if (goodsCategory.value.length) {
+    activeGoodsCateId.value = goodsCategory.value[0].id
+    goodsList.value = await api.get('/goods/list', {
+      params: { category_id: activeGoodsCateId.value }
+    })
+  }
+})
 </script>
 
 <template>
@@ -313,30 +317,32 @@ const goodsClickHandler = (goodDetail: any) => {
           </div>
 
           <div _flex="~ 1" _p="x-15px" _text="white/90">
-            <div _flex="1" _w="full" _grid="~ cols-3 gap-20px" _overflow="auto">
-              <div
-                v-for="item in goodsList"
-                :key="item.title"
-                _bg="[#303030]"
-                _border="rounded"
-                _flex="~ col items-center"
-                _filter="~"
-                _transition="duration-300"
-                _cursor="pointer"
-                _hover="brightness-110"
-                @click="goodsClickHandler(item)"
-              >
-                <div _m="t-15px">{{ item.title }}</div>
-                <img
-                  _m="y-15px"
-                  _w="200px"
-                  _h="140px"
-                  _object="cover"
-                  :src="BASE_URL + item.img"
-                />
-                <div _m="b-15px" _flex="~ items-center">
-                  <img _m="r-5px" _w="15px" _h="15px" src="../assets/img/coin.png" />
-                  <div>{{ item.price }}</div>
+            <div _w="full">
+              <div _w="full" _grid="~ cols-3 gap-20px" _overflow="auto">
+                <div
+                  v-for="item in goodsList"
+                  :key="item.title"
+                  _bg="[#303030]"
+                  _border="rounded"
+                  _flex="~ col items-center"
+                  _filter="~"
+                  _transition="duration-300"
+                  _cursor="pointer"
+                  _hover="brightness-110"
+                  @click="goodsClickHandler(item)"
+                >
+                  <div _m="t-15px">{{ item.title }}</div>
+                  <img
+                    _m="y-15px"
+                    _w="200px"
+                    _h="140px"
+                    _object="cover"
+                    :src="BASE_URL + item.img"
+                  />
+                  <div _m="b-15px" _flex="~ items-center">
+                    <img _m="r-5px" _w="15px" _h="15px" src="../assets/img/coin.png" />
+                    <div>{{ item.price }}</div>
+                  </div>
                 </div>
               </div>
             </div>
