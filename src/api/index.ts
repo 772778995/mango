@@ -4,7 +4,7 @@ import Axios from 'axios'
 import throwError from '../utils/throwError'
 import { Loading } from 'quasar'
 // import { Notify } from 'quasar'
-export const BASE_URL = 'http://103.85.87.250:8087'
+export const BASE_URL = 'https://www.moshou80.com:8088'
 const api = Axios.create({ baseURL: BASE_URL + '/api' })
 export const reqs = ref(0)
 
