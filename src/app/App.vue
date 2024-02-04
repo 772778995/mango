@@ -211,6 +211,7 @@ const goodsClickHandler = (goodDetail: any) => {
           _transition="duration-300"
           _hover="bg-[#353535] text-white"
           :class="{ 'bg-[#353535] text-white': i === activeCateIndex }"
+          @click="activeCateIndex = i"
         >
           <div
             _flex="~ center"
