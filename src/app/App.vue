@@ -11,6 +11,8 @@ const isLoginDialogShow = ref(false)
 const isRegisterDialogShow = ref(false)
 /** 是否显示商品详情弹窗 */
 const isGoodsDetailDialogShow = ref(false)
+/** 选中分类 */
+const activeCateIndex = ref(0)
 /** 选中商品详情信息 */
 const activeGoodsDetail = ref<any>(null)
 /** 选中商品分类ID */
@@ -189,8 +191,9 @@ const goodsClickHandler = (goodDetail: any) => {
         _text="[#727272]"
         _border="1.5px rounded-sm [#303030]"
       >
+        <!-- prettier-ignore -->
         <div
-          v-for="item in [
+          v-for="(item, i) in ([
             { txt: '主页', icon: 'fa-house' },
             { txt: '主页', icon: 'fa-house' },
             { txt: '主页', icon: 'fa-house' },
@@ -200,13 +203,14 @@ const goodsClickHandler = (goodDetail: any) => {
             { txt: '主页', icon: 'fa-house' },
             { txt: '主页', icon: 'fa-house' },
             { txt: '主页', icon: 'fa-house' }
-          ]"
+          ])"
           :key="item.txt"
           _flex="~ items-center"
           _p="x-15px y-5px"
           _cursor="pointer"
           _transition="duration-300"
           _hover="bg-[#353535] text-white"
+          :class="{ 'bg-[#353535] text-white': i === activeCateIndex }"
         >
           <div
             _flex="~ center"
