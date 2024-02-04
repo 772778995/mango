@@ -1,0 +1,17 @@
+{
+  "extends": "@quasar/app-vite/tsconfig-preset",
+  "compilerOptions": {
+    "skipDefaultLibCheck": true,
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "~/*": ["../backend/src/*"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "../backend/src/**/*"
+  ]
+}

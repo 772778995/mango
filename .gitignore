@@ -1,0 +1,6 @@
+/node_modules
+/dist
+/src-capacitor
+/src-electron
+/.quasar
+*.log
